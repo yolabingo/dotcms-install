@@ -4,10 +4,10 @@
 
 app_user=dotcms
 app_user_uid=10000
-nfs_dir=/home/${app_user}/export
+nfs_dir=/opt/dotcms/data/assets
 
-dotcms_ip=192.168.223.183
-nfs_ip=192.168.217.23
+dotcms_ip=192.168.175.140
+nfs_ip=192.168.189.9
 postgres_ip=192.168.226.80
 
 # local 192.168 address of this machine
@@ -68,7 +68,8 @@ set_firewall () {
 
 nfs_exports () {
     print_func
-    su -c "mkdir -p $nfs_dir" $app_user
+    mkdir -p $nfs_dir
+    chown $nfs_dir $app_user
     echo "RPCNFSDCOUNT=64" > /etc/sysconfig/nfs
     if ( ! grep -q "^${nfs_dir}\s" /etc/exports )
     then
@@ -80,8 +81,8 @@ nfs_exports () {
 
 fetch_sample_media () {
     print_func
-    su -c "curl --create-dirs -o ${nfs_dir}/media/mountain1.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Blue_sky_clouds_and_mountains.jpg/800px-Blue_sky_clouds_and_mountains.jpg" $app_user
-    su -c "curl -o ${nfs_dir}/media/mountain2.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Beartooth_Mountains_7.jpg/800px-Beartooth_Mountains_7.jpg" $app_user
+    su -c "curl -o ${nfs_dir}/mountain1.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Blue_sky_clouds_and_mountains.jpg/800px-Blue_sky_clouds_and_mountains.jpg" $app_user
+    su -c "curl -o ${nfs_dir}/mountain2.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Beartooth_Mountains_7.jpg/800px-Beartooth_Mountains_7.jpg" $app_user
 }
 
 create_nfs_server () {
@@ -101,7 +102,7 @@ create_nfs_server () {
 install_packages () {
     print_func
     yum install -y  epel-release
-    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools
+    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx
     systemctl enable --now fail2ban rpcbind nfs-idmapd
 }
 
