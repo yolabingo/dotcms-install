@@ -41,7 +41,7 @@ create_app_user () {
 
 #### NFS server setup ####
 
-install_packages () {
+install_nfs_packages () {
     print_func
     yum install -y  epel-release
     yum install -y fail2ban
@@ -69,7 +69,7 @@ set_firewall () {
 nfs_exports () {
     print_func
     mkdir -p $nfs_dir
-    chown $nfs_dir $app_user
+    chown -R ${app_user}:${app_user} $nfs_dir
     echo "RPCNFSDCOUNT=64" > /etc/sysconfig/nfs
     if ( ! grep -q "^${nfs_dir}\s" /etc/exports )
     then
@@ -88,7 +88,7 @@ fetch_sample_media () {
 create_nfs_server () {
     print_func
     selinux_permissive
-    install_packages
+    install_nfs_packages
     set_firewall
     create_app_user
     nfs_exports
@@ -99,7 +99,7 @@ create_nfs_server () {
 ####  dotcms server setup ####
 
 # dotcms server
-install_packages () {
+install_dotcms_packages () {
     print_func
     yum install -y  epel-release
     yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx
@@ -120,7 +120,7 @@ mount_nfs () {
 create_dotcms_server () {
     print_func
     selinux_permissive
-    install_packages
+    install_dotcms_packages
     create_app_user
     mount_nfs
 }
