@@ -58,11 +58,6 @@ set_firewall () {
     firewall-cmd --permanent --zone=$zone --add-source=$dotcms_ip 
     firewall-cmd --permanent --zone=$zone --add-port=111/tcp
     firewall-cmd --permanent --zone=$zone --add-service=nfs
-    # firewall-cmd --permanent --zone=$zone --add-port=54302/tcp
-    # firewall-cmd --permanent --zone=$zone --add-port=20048/tcp
-    # firewall-cmd --permanent --zone=$zone --add-port=46666/tcp
-    # firewall-cmd --permanent --zone=$zone --add-port=42955/tcp
-    # firewall-cmd --permanent --zone=$zone --add-port=875/tcp
     firewall-cmd --reload
 }
 
@@ -83,6 +78,7 @@ fetch_sample_media () {
     print_func
     su -c "curl -o ${nfs_dir}/mountain1.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Blue_sky_clouds_and_mountains.jpg/800px-Blue_sky_clouds_and_mountains.jpg" $app_user
     su -c "curl -o ${nfs_dir}/mountain2.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/Beartooth_Mountains_7.jpg/800px-Beartooth_Mountains_7.jpg" $app_user
+    ls -l $nfs_dir
 }
 
 create_nfs_server () {
@@ -102,7 +98,7 @@ create_nfs_server () {
 install_dotcms_packages () {
     print_func
     yum install -y  epel-release
-    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx
+    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx python3-certbot
     systemctl enable --now fail2ban rpcbind nfs-idmapd
 }
 
