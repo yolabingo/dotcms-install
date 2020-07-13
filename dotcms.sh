@@ -105,12 +105,6 @@ install_packages () {
     systemctl enable --now fail2ban rpcbind nfs-idmapd
 }
 
-create_app_user () {
-    print_func
-    useradd --uid=${app_user_uid} ${app_user}
-    su -c "mkdir -p ${remote_dir}" ${app_user}
-}
-
 mount_nfs () {
     print_func
     local_dir=/mnt${nfs_dir}
