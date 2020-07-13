@@ -4,14 +4,20 @@
 
 app_user=dotcms
 app_user_uid=10000
+app_dir=/home/${app_user}/app
 nfs_dir=/opt/dotcms/data/assets
 
 dotcms_ip=192.168.175.140
 nfs_ip=192.168.189.9
 postgres_ip=192.168.226.80
 
+postgres_db=dotcms
+postgres_username=dotcms
+postgres_password="b=&jinjili?thrammle*eTt&@3q&r87d"
 # local 192.168 address of this machine
 local_ip=$( ip -o addr | grep "192.168" | awk '{print $4}' | sed 's,/.*,,' )
+
+dotcms_download=http://static.dotcms.com/versions/dotcms_5.3.3.tar.gz
 
 #### common functions ####
 
@@ -98,7 +104,7 @@ create_nfs_server () {
 install_dotcms_packages () {
     print_func
     yum install -y  epel-release
-    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx python3-certbot
+    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx python3-certbot tar wget
     systemctl enable --now fail2ban rpcbind nfs-idmapd
 }
 
@@ -113,12 +119,34 @@ mount_nfs () {
     mount -v $nfs_dir
 }
 
+dotcms_app_prep () {
+    su -c "cd && mkdir -p $app_dir && curl $dotcms_download | tar -C $app_dir -xzf -" $app_user
+    su -c 'echo "JAVA_HOME=$(dirname $(dirname $(dirname $(readlink -f $(which java)))))" >> ~/.bashrc' $app_user
+    # ROOT folder config override
+    # ugh hard-coded path 
+    db_config="${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/tomcat-8.5.32/webapps/ROOT/WEB-INF/classes/db.properties"
+    su -c "mkdir -p $(dirname ${db_config})" $app_user
+    cat << EOF > $db_config
+driverClassName=org.postgresql.Driver
+jdbcUrl=jdbc:postgresql://${postgres_ip}/${postgres_db}
+username=${postgres_username}
+password=${postgres_password}
+connectionTestQuery=SELECT 1
+maximumPoolSize=60
+idleTimeout=10
+maxLifetime=60000
+leakDetectionThreshold=60000
+EOF
+    echo "DB config written to $db_config"
+}
+
 create_dotcms_server () {
     print_func
     selinux_permissive
     install_dotcms_packages
     create_app_user
     mount_nfs
+    dotcms_app_prep
 }
 
 if [ "$local_ip" == "$nfs_ip" ]
