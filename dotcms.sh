@@ -17,11 +17,11 @@ local_ip=$( ip -o addr | grep "192.168" | awk '{print $4}' | sed 's,/.*,,' )
 
 print_func () {
     echo 
-    if [ ${FUNCNAME[2]} ]
+    if [ ${FUNCNAME[3]} ]
     then
-        echo "  === ${FUNCNAME[2]} () === "
+        echo "  === ${FUNCNAME[3]} () === "
     else
-        echo "  === ${FUNCNAME[1]} () === "
+        echo "  === ${FUNCNAME[2]} () === "
     fi
 }
 
