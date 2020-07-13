@@ -7,7 +7,7 @@ app_user_uid=10000
 nfs_dir=/home/${app_user}/export
 
 dotcms_ip=192.168.223.183
-nfs_server_ip=192.168.217.23
+nfs_ip=192.168.217.23
 postgres_ip=192.168.226.80
 
 # local 192.168 address of this machine
@@ -118,7 +118,7 @@ mount_nfs () {
     chown -R ${app_user}:${app_user} /mnt/home/${app_user}
     if ( ! egrep -q "^[0-9\.]+:${remote_dir}\s" /etc/fstab )
     then	
-        echo "${nfs_server}:${nfs_dir}  ${local_dir}  nfs  rw,sync,hard,intr,noatime 0 0" >> /etc/fstab
+        echo "${nfs_ip}:${nfs_dir}  ${local_dir}  nfs  rw,sync,hard,intr,noatime 0 0" >> /etc/fstab
     fi 
     mount -v $local_dir
 }
