@@ -108,14 +108,13 @@ install_packages () {
 
 mount_nfs () {
     print_func
-    local_dir=/mnt${nfs_dir}
-    mkdir -p ${local_dir}
-    chown -R ${app_user}:${app_user} /mnt/home/${app_user}
-    if ( ! egrep -q "^[0-9\.]+:${remote_dir}\s" /etc/fstab )
+    mkdir -p ${nfs_dir}
+    chown -R ${app_user}:${app_user} ${nfs_dir}
+    if ( ! egrep -q "^[0-9\.]+:${nfs_dir}\s" /etc/fstab )
     then	
-        echo "${nfs_ip}:${nfs_dir}  ${local_dir}  nfs  rw,sync,hard,intr,noatime 0 0" >> /etc/fstab
+        echo "${nfs_ip}:${nfs_dir}  ${nfs_dir}  nfs  rw,sync,hard,intr,noatime 0 0" >> /etc/fstab
     fi 
-    mount -v $local_dir
+    mount -v $nfs_dir
 }
 
 create_dotcms_server () {
