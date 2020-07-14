@@ -4,6 +4,8 @@
 ####  dotcms server setup ####
 ##############################
 
+source ./common.sh
+
 # dotcms server
 dotcms_install_packages () {
     print_funcname

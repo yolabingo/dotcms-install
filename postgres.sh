@@ -4,6 +4,8 @@
 ####  postgres server setup ####
 ################################
 
+source ./common.sh
+
 pg_install_packages () {
 }
 
