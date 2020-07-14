@@ -15,7 +15,7 @@ app_servername=dotcms.discodecline.com
 
 postgres_db=dotcms
 postgres_username=dotcms
-postgres_password="b=&jinjili?thrammle*eTt&@3q&r87d"
+postgres_password="bjinjili3thrammleeTtqr87d"
 # local 192.168 address of this machine
 local_ip=$( ip -o addr | grep "192.168" | awk '{print $4}' | sed 's,/.*,,' )
 
@@ -131,6 +131,10 @@ install_nginx_certbot () {
 }
 
 dotcms_app_prep () {
+    if [ -d $app_dir/dotserver ]
+    then
+        return 0
+    fi
     su -c "cd && mkdir -p $app_dir && curl $dotcms_download | tar -C $app_dir -xzf -" $app_user
     su -c 'echo "JAVA_HOME=$(dirname $(dirname $(dirname $(readlink -f $(which java)))))" >> ~/.bashrc' $app_user
     # ROOT folder config override
@@ -157,6 +161,7 @@ create_dotcms_server () {
     install_dotcms_packages
     create_app_user
     mount_nfs
+    install_nginx_certbot
     dotcms_app_prep
 }
 
