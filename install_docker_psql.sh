@@ -23,7 +23,7 @@ docker_run_postgres () {
         -e POSTGRES_PASSWORD=${postgres_password} \
         -e POSTGRES_DB=${postgres_db} \
         -v dotcms_postgres:/var/lib/postgresql/data \
-        -p ${docker_ip}:5432:5432 \
+        -p ${postgres_ip}:5432:5432 \
         -d postgres:12
 EOC
 }
