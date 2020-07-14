@@ -122,6 +122,7 @@ mount_nfs () {
 }
 
 install_nginx_certbot () {
+    mkdir -p /usr/share/nginx/.well-known/acme-challenge
     sed "s/SERVERNAME/${app_servername}/" nginx.conf > /etc/nginx/conf.d/${app_servername}.conf
     systemctl reload nginx
     certbot-3 certonly --webroot -d $app_servername -w /usr/share/nginx --deploy-hook "/usr/bin/systemctl reload nginx.service" \
