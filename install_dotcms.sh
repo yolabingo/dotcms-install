@@ -9,9 +9,10 @@ source ./common.sh
 
 dotcms_install_packages () {
     print_funcname
+    yum update -y
     amazon-linux-extras install -y  epel
-    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx certbot tar java-1.8.0-openjdk-headless
-    systemctl enable --now fail2ban rpcbind nfs-idmapd nginx
+    yum install -y rpcbind nfs-utils nfs4-acl-tools nginx certbot tar java-1.8.0-openjdk-headless
+    systemctl enable --now rpcbind nfs-idmapd nginx
 }
 
 # mount the NFS media directory from the NFS server

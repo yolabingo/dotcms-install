@@ -9,11 +9,10 @@ source ./common.sh
 
 nfs_install_packages () {
     print_funcname
+    yum update -y
     amazon-linux-extras install -y epel
-    yum install -y fail2ban
     yum install -y portmap nfs-utils nfs4-acl-tools
-    systemctl enable --now fail2ban
-    systemctl enable --now nfs-server.service
+    systemctl enable --now nfs-server
 }
 
 # create and export NFS media directory
