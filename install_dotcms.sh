@@ -70,7 +70,7 @@ maxLifetime=60000
 leakDetectionThreshold=60000
 EOCONF
     echo "DB config written to $db_config"
-    ${app_dir}/bin/startup.sh
+    echo "${app_dir}/bin/startup.sh" | su - $app_user
     echo
     echo "dotcms running at https://${app_servername}"
     echo
