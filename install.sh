@@ -124,7 +124,7 @@ mount_nfs () {
 install_nginx_certbot () {
     sed "s/SERVERNAME/${app_servername}/" nginx.conf > /etc/nginx/conf.d/${app_servername}.conf
     systemctl reload nginx
-    certbot certonly --webroot -d $app_servername -w /var/www --deploy-hook "/usr/bin/systemctl reload nginx.service" \
+    certbot-3 certonly --webroot -d $app_servername -w /var/www --deploy-hook "/usr/bin/systemctl reload nginx.service" \
  			--agree-tos --register-unsafely-without-email 
     sed "s/SERVERNAME/${app_servername}/" nginx-ssl.conf > /etc/nginx/conf.d/${app_servername}-ssl.conf
     systemctl reload nginx
