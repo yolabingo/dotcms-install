@@ -1,5 +1,4 @@
 #!/bin/sh
-
 # vim: ts=4 sw=4 sts=4 et:
 	
 ##########################
@@ -10,13 +9,14 @@ source ./common.sh
 
 nfs_install_packages () {
     print_funcname
-    yum install -y  epel-release
+    amazon-linux-extras install -y epel
     yum install -y fail2ban
     yum install -y portmap nfs-utils nfs4-acl-tools
     systemctl enable --now fail2ban
     systemctl enable --now nfs-server.service
 }
 
+# create and export NFS media directory
 nfs_exports () {
     print_funcname
     mkdir -p $nfs_dir
@@ -30,6 +30,7 @@ nfs_exports () {
     exportfs -rav
 }
 
+# add some image files to the NFS dir for testing
 nfs_fetch_sample_media () {
     print_funcname
     su -c "curl -o ${nfs_dir}/mountain1.jpg https://upload.wikimedia.org/wikipedia/commons/thumb/2/20/Blue_sky_clouds_and_mountains.jpg/800px-Blue_sky_clouds_and_mountains.jpg" $app_user

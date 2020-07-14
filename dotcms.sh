@@ -1,4 +1,5 @@
 #!/bin/sh
+# vim: ts=4 sw=4 sts=4 et:
 
 ##############################
 ####  dotcms server setup ####
@@ -6,7 +7,6 @@
 
 source ./common.sh
 
-# dotcms server
 dotcms_install_packages () {
     print_funcname
     amazon-linux-extras install -y  epel
@@ -14,6 +14,7 @@ dotcms_install_packages () {
     systemctl enable --now fail2ban rpcbind nfs-idmapd nginx
 }
 
+# mount the NFS media directory from the NFS server
 dotcms_mount_nfs () {
     print_funcname
     mkdir -p ${nfs_dir}
@@ -25,6 +26,7 @@ dotcms_mount_nfs () {
     mount -v $nfs_dir
 }
 
+# install nginx with SSL as reverse proxy to dotcms app
 dotcms_install_nginx_certbot () {
     mkdir -p /usr/share/nginx/.well-known/acme-challenge
     sed "s,SERVERNAME,${app_servername},; s,NGINXROOT,${nginx_root}" nginx.conf \
