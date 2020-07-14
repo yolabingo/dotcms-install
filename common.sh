@@ -1,4 +1,7 @@
 #!/bin/sh
+# vim: ts=4 sw=4 sts=4 et:
+
+# variables and functions used by the other setup scripts
 
 app_user=dotcms
 app_user_uid=10000
