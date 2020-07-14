@@ -5,7 +5,9 @@
 ##########################
 #### NFS server setup ####
 ##########################
-    	
+
+source common.sh
+
 nfs_install_packages () {
     print_funcname
     yum install -y  epel-release
