@@ -122,6 +122,8 @@ mount_nfs () {
 }
 
 install_nginx_certbot () {
+    firewall-cmd --permanent --zone=public --add-service=http
+    firewall-cmd --permanent --zone=public --add-service=https
     mkdir -p /usr/share/nginx/.well-known/acme-challenge
     sed "s/SERVERNAME/${app_servername}/" nginx.conf > /etc/nginx/conf.d/${app_servername}.conf
     systemctl reload nginx
