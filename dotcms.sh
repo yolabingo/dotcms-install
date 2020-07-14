@@ -27,7 +27,7 @@ dotcms_mount_nfs () {
 
 dotcms_install_nginx_certbot () {
     mkdir -p /usr/share/nginx/.well-known/acme-challenge
-    sed "s/SERVERNAME/${app_servername}/; s/NGINXROOT/${nginx_root}" nginx.conf \
+    sed "s,SERVERNAME,${app_servername},; s,NGINXROOT,${nginx_root}" nginx.conf \
 		> /etc/nginx/conf.d/${app_servername}.conf
     systemctl reload nginx
     if [ ! -f /etc/letsencrypt/archive/${app_servername}/cert.pem ]
@@ -36,7 +36,7 @@ dotcms_install_nginx_certbot () {
 		           --deploy-hook "/usr/bin/systemctl reload nginx.service" \
  			   --agree-tos --register-unsafely-without-email 
     fi 
-    sed "s/SERVERNAME/${app_servername}/; s/NGINXROOT/${nginx_root}" nginx-ssl.conf \
+    sed "s,SERVERNAME,${app_servername},; s,NGINXROOT,${nginx_root}" nginx-ssl.conf \
 		> /etc/nginx/conf.d/${app_servername}-ssl.conf
     systemctl reload nginx
 }
