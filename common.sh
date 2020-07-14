@@ -10,7 +10,7 @@ nfs_dir=/opt/dotcms/data/assets
 
 dotcms_ip=192.168.175.140
 nfs_ip=192.168.189.9
-docker_ip=192.168.226.80
+postgres_ip=192.168.226.80
 
 app_servername=dotcms.discodecline.com
 
@@ -19,8 +19,6 @@ postgres_username=dotcms
 postgres_password="bjinjili3thrammleeTtqr87d"
 
 nginx_root=/usr/share/nginx
-# local address of this machine
-local_ip=$( ip -o addr | grep "192.168" | awk '{print $4}' | sed 's,/.*,,' )
 
 dotcms_download=http://static.dotcms.com/versions/dotcms_5.3.3.tar.gz
 
