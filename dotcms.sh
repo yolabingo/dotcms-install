@@ -10,7 +10,7 @@ source ./common.sh
 dotcms_install_packages () {
     print_funcname
     amazon-linux-extras install -y  epel
-    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx certbot tar 
+    yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx certbot tar java-1.8.0-openjdk-headless
     systemctl enable --now fail2ban rpcbind nfs-idmapd nginx
 }
 
@@ -72,7 +72,6 @@ EOCONF
     echo
 }
 
-print_funcname
 selinux_permissive
 create_app_user
 dotcms_install_packages

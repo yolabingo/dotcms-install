@@ -37,7 +37,6 @@ nfs_fetch_sample_media () {
     ls -l $nfs_dir
 }
 
-print_funcname
 selinux_permissive
 create_app_user
 nfs_install_packages
