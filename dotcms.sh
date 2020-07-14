@@ -70,13 +70,10 @@ EOCONF
     echo
 }
 
-dotcms_install () {
-    print_funcname
-    selinux_permissive
-    create_app_user
-    dotcms_install_packages
-    dotcms_mount_nfs
-    dotcms_install_nginx_certbot
-    dotcms_app_install
-}
-
+print_funcname
+selinux_permissive
+create_app_user
+dotcms_install_packages
+dotcms_mount_nfs
+dotcms_install_nginx_certbot
+dotcms_app_install
