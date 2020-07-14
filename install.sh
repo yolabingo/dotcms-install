@@ -11,6 +11,8 @@ dotcms_ip=192.168.175.140
 nfs_ip=192.168.189.9
 postgres_ip=192.168.226.80
 
+app_servername=dotcms.discodecline.com
+
 postgres_db=dotcms
 postgres_username=dotcms
 postgres_password="b=&jinjili?thrammle*eTt&@3q&r87d"
@@ -105,7 +107,7 @@ install_dotcms_packages () {
     print_func
     yum install -y  epel-release
     yum install -y fail2ban rpcbind nfs-utils nfs4-acl-tools nginx python3-certbot tar wget
-    systemctl enable --now fail2ban rpcbind nfs-idmapd
+    systemctl enable --now fail2ban rpcbind nfs-idmapd nginx
 }
 
 mount_nfs () {
@@ -117,6 +119,15 @@ mount_nfs () {
         echo "${nfs_ip}:${nfs_dir}  ${nfs_dir}  nfs  rw,sync,hard,intr,noatime 0 0" >> /etc/fstab
     fi 
     mount -v $nfs_dir
+}
+
+install_nginx_certbot () {
+    sed "s/SERVERNAME/${app_servername}/" nginx.conf > /etc/nginx/conf.d/${app_servername}.conf
+    systemctl reload nginx
+    certbot certonly --webroot -d $app_servername -w /var/www --deploy-hook "/usr/bin/systemctl reload nginx.service" \
+ 			--agree-tos --register-unsafely-without-email 
+    sed "s/SERVERNAME/${app_servername}/" nginx-ssl.conf > /etc/nginx/conf.d/${app_servername}-ssl.conf
+    systemctl reload nginx
 }
 
 dotcms_app_prep () {
