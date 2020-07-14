@@ -10,7 +10,7 @@ nfs_dir=/opt/dotcms/data/assets
 
 dotcms_ip=192.168.175.140
 nfs_ip=192.168.189.9
-postgres_ip=192.168.226.80
+docker_ip=192.168.226.80
 
 app_servername=dotcms.discodecline.com
 
