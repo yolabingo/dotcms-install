@@ -18,7 +18,7 @@ dotcms_install_packages () {
 
 dotcms_install_elasticsearch () {
     print_funcname
-    sysctl -w $( echo "vm.max_map_count=60000" | tee /etc/sysctl.d/dotcms-es-vm.max_map_count ) 
+    sysctl -w $( echo "vm.max_map_count=262144" | tee /etc/sysctl.d/dotcms-es-vm.max_map_count ) 
     docker-compose -f $(pwd)/elasticsearch/docker-compose.yml up -d
     waiting_for_es=true
     while [ "$waiting_for_es" = true ]
@@ -27,7 +27,7 @@ dotcms_install_elasticsearch () {
         sleep 8
         if ( curl -s -X GET "127.0.0.1:9200/_cat/nodes?v&pretty" ) 
         then 
-            waiting_for_es=true
+            waiting_for_es=false
         fi
     done
     echo "elasticsearch is reachable"
