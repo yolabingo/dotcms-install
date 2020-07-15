@@ -18,6 +18,7 @@ run_postgres () {
         -p ${postgres_ip}:5432:5432 \
         -d postgres:12
 EOC
+    docker ps
 }
 
 selinux_permissive
