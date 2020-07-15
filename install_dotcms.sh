@@ -27,6 +27,10 @@ dotcms_mount_nfs () {
     mount -v $nfs_dir
 }
 
+dotcms_install_elasticsearch () {
+    echo "docker-compose up -p elasticsearch" | su - $app_user
+}
+
 # install nginx with SSL as reverse proxy to dotcms app
 dotcms_install_nginx_certbot () {
     print_funcname
@@ -78,6 +82,7 @@ EOCONF
 
 selinux_permissive
 create_app_user
+docker_install
 dotcms_install_packages
 dotcms_mount_nfs
 dotcms_install_nginx_certbot

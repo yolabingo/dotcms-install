@@ -7,15 +7,8 @@
 
 source ./common.sh
 
-docker_install () {
-    yum upate -y
-    amazon-linux-extras install -y docker	
-    systemctl enable --now docker
-    usermod -a -G docker $app_user
-}
-
 # runs postgres and elasticsearch via docker, as $app_user
-docker_run_postgres () {
+run_postgres () {
     cat <<- EOC | su - $app_user
     docker run \
         --name dotcms-postgres \
@@ -30,4 +23,4 @@ EOC
 selinux_permissive
 create_app_user
 docker_install
-docker_run_postgres
+run_postgres
