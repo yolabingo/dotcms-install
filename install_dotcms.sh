@@ -97,6 +97,7 @@ EOCONF
 selinux_permissive
 create_app_user
 docker_install
+dotcms_install_elasticsearch 
 dotcms_install_packages
 dotcms_mount_nfs
 dotcms_install_nginx_certbot
