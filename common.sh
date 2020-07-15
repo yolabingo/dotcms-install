@@ -50,10 +50,12 @@ create_app_user () {
 }
 
 docker_install () {
+    print_funcname
     yum upate -y
     amazon-linux-extras install -y docker	
     systemctl enable --now docker
     usermod -a -G docker $app_user
+    # and docker-compose
     if [ ! -x /usr/local/bin/docker-compose ]
     then
         sudo curl -L \

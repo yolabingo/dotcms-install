@@ -15,6 +15,23 @@ dotcms_install_packages () {
     systemctl enable --now rpcbind nfs-idmapd nginx
 }
 
+
+dotcms_install_elasticsearch () {
+    print_funcname
+    echo "docker-compose -f $(pwd)/elasticsearch/docker-compose.yml up -d" | su - $app_user
+    waiting_for_es=true
+    while [ "$waiting_for_es" = true ]
+    do
+        echo "waiting for elasticsearch..." 
+        sleep 8
+        if ( curl -s -X GET "127.0.0.1:9200/_cat/nodes?v&pretty" ) 
+        then 
+            waiting_for_es=true
+        fi
+    done
+    echo "elasticsearch is reachable"
+}
+
 # mount the NFS media directory from the NFS server
 dotcms_mount_nfs () {
     print_funcname
@@ -25,10 +42,6 @@ dotcms_mount_nfs () {
         echo "${nfs_ip}:${nfs_dir}  ${nfs_dir}  nfs  rw,sync,hard,intr,noatime 0 0" >> /etc/fstab
     fi 
     mount -v $nfs_dir
-}
-
-dotcms_install_elasticsearch () {
-    echo "docker-compose up -p elasticsearch" | su - $app_user
 }
 
 # install nginx with SSL as reverse proxy to dotcms app
