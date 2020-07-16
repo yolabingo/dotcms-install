@@ -1,96 +1,59 @@
 version: '2.2'
+
 services:
   es01:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
     container_name: es01
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
     environment:
       - node.name=es01
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es02,es03
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
+      - cluster.initial_master_nodes=es01,es02
+      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD 
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-         soft: 65536
-         hard: 65536
-    volumes:
-      - data01:/usr/share/elasticsearch/data
+      - xpack.license.self_generated.type=trial 
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=$CERTS_DIR/es01/es01.key
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.http.ssl.certificate=$CERTS_DIR/es01/es01.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate 
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es01/es01.crt
+      - xpack.security.transport.ssl.key=$CERTS_DIR/es01/es01.key
+    volumes: ['esdata_01:/usr/share/elasticsearch/data', './certs:$CERTS_DIR']
     ports:
       - 9200:9200
-    networks:
-      - elastic
+    healthcheck:
+      test: curl --cacert $CERTS_DIR/ca/ca.crt -s https://localhost:9200 >/dev/null; if [[ $$? == 52 ]]; then echo 0; else echo 1; fi
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   es02:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
     container_name: es02
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
     environment:
       - node.name=es02
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es03
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
+      - discovery.seed_hosts=es01
+      - cluster.initial_master_nodes=es01,es02
+      - ELASTIC_PASSWORD=$ELASTIC_PASSWORD
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-         soft: 65536
-         hard: 65536
-    volumes:
-      - data02:/usr/share/elasticsearch/data
-    ports:
-      - 9201:9200
-    networks:
-      - elastic
+      - xpack.license.self_generated.type=trial
+      - xpack.security.enabled=true
+      - xpack.security.http.ssl.enabled=true
+      - xpack.security.http.ssl.key=$CERTS_DIR/es02/es02.key
+      - xpack.security.http.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.http.ssl.certificate=$CERTS_DIR/es02/es02.crt
+      - xpack.security.transport.ssl.enabled=true
+      - xpack.security.transport.ssl.verification_mode=certificate 
+      - xpack.security.transport.ssl.certificate_authorities=$CERTS_DIR/ca/ca.crt
+      - xpack.security.transport.ssl.certificate=$CERTS_DIR/es02/es02.crt
+      - xpack.security.transport.ssl.key=$CERTS_DIR/es02/es02.key
+    volumes: ['esdata_02:/usr/share/elasticsearch/data', './certs:$CERTS_DIR']
 
-  es03:
-    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.0
-    container_name: es03
-    environment:
-      - node.name=es03
-      - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=es01,es02
-      - cluster.initial_master_nodes=es01,es02,es03
-      - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-    ulimits:
-      memlock:
-        soft: -1
-        hard: -1
-      nofile:
-         soft: 65536
-         hard: 65536
-    volumes:
-      - data03:/usr/share/elasticsearch/data
-    ports:
-      - 9202:9200
-    networks:
-      - elastic
+  wait_until_ready:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ES_VERSION}
+    command: /usr/bin/true
+    depends_on: {"es01": {"condition": "service_healthy"}}
 
-  kib01:
-    image: docker.elastic.co/kibana/kibana:7.8.0
-    container_name: kib01
-    ports:
-      - 5601:5601
-    environment:
-      ELASTICSEARCH_URL: http://es01:9200
-      ELASTICSEARCH_HOSTS: http://es01:9200
-    networks:
-      - elastic
-
-volumes:
-  data01:
-    driver: local
-  data02:
-    driver: local
-  data03:
-    driver: local
-
-networks:
-  elastic:
-    driver: bridge
+volumes: {"esdata_01": {"driver": "local"}, "esdata_02": {"driver": "local"}}
