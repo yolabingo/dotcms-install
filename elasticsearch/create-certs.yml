@@ -15,6 +15,5 @@ services:
         fi;
         chgrp -R 0 config/certificates/certs
       '
-    user: ${UID:-1000}
     working_dir: /usr/share/elasticsearch
     volumes: ['.:/usr/share/elasticsearch/config/certificates']
