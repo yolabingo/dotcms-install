@@ -19,7 +19,7 @@ dotcms_install_packages () {
 dotcms_install_elasticsearch () {
     print_funcname
     sysctl -w $( echo "vm.max_map_count=262144" | tee /etc/sysctl.d/dotcms-es-vm.max_map_count ) 
-    docker-compose -f $(pwd)/elasticsearch/docker-compose.yml up -d
+    ( cd elasticsearch && docker-compose -f create-certs.yml run --rm create_certs && docker-compose up -d )
     waiting_for_es=true
     while [ "$waiting_for_es" = true ]
     do
