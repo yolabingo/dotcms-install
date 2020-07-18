@@ -29,8 +29,8 @@ run_postgres () {
 echo foo
 echo "$postgres_db"
 
-# selinux_permissive
-# create_app_user
-# docker_install
+selinux_permissive
+create_app_user
+docker_install
 set_db_creds
 run_postgres

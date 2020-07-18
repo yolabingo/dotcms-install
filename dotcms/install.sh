@@ -103,13 +103,13 @@ install_elasticsearch () {
 }
 
 
-# selinux_permissive
-# create_app_user
-# docker_install
-# dotcms_install_packages
-# dotcms_mount_nfs
-# dotcms_install_nginx_certbot
-# dotcms_download
+selinux_permissive
+create_app_user
+docker_install
+dotcms_install_packages
+dotcms_mount_nfs
+dotcms_install_nginx_certbot
+dotcms_download
 build_elasticsearch_image
-# install_elasticsearch
+install_elasticsearch
 
