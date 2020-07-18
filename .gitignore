@@ -1,1 +1,5 @@
 elasticsearch/certs
+postgres/init.sql
+dotcms/Dockerfile
+dotcms/jarfiles
+dotcms/config
