@@ -1,5 +1,5 @@
-elasticsearch/certs
 postgres/init.sql
-dotcms/Dockerfile
-dotcms/jarfiles
-dotcms/config
+dotcms/elasticsearch/Dockerfile
+dotcms/elasticsearch/jarfiles
+dotcms/elasticsearch/config
+dotcms/elasticsearch/.env

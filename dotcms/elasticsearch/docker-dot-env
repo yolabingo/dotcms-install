@@ -1,4 +1,4 @@
+# copy me to  .env
 COMPOSE_PROJECT_NAME=es 
 CERTS_DIR=/usr/share/elasticsearch/config/certificates 
 ES_HEAP_SIZE=2g
-ELASTIC_PASSWORD=mR6antifoamingMJaquesianJhFmTJJ2

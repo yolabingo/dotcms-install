@@ -1,9 +1,9 @@
 #!/bin/bash
 # vim: ts=4 sw=4 sts=4 et:
 
-##############################
-####  dotcms server setup ####
-##############################
+################################################
+####  dotcms and elasticsearch server setup ####
+################################################
 
 # install dotcms from binary tarball and run as "dotcms" user
 # install nginx as reverse proxy, add cerbot SSL cert
@@ -49,14 +49,13 @@ dotcms_install_nginx_certbot () {
     systemctl reload nginx
 }
 
-# install and start dotcms
+# fetch dotcms
 dotcms_download () {
     if [ -d $app_dir/dotserver ]
     then
         return 0
     fi
-    url=${dotcms_download=http://static.dotcms.com/versions/dotcms_${dotcms_version}.tar.gz}
-    su -c "cd && mkdir -p $app_dir && curl $url | tar -C $app_dir -xzf -" $app_user
+    su -c "cd && mkdir -p $app_dir && curl $dotcms_download_url | tar -C $app_dir -xzf -" $app_user
     su -c 'echo "JAVA_HOME=$(dirname $(dirname $(dirname $(readlink -f $(which java)))))" >> ~/.bashrc' $app_user
     # ROOT folder config override
     db_config="${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/db.properties"
@@ -77,29 +76,45 @@ EOCONF
 }
 
 build_elasticsearch_image () {
+    cat elasticsearch/docker-dot-env > elasticsearch/.env
+    echo "ELASTIC_PASSWORD=${elasticsearch_superuser_password}" >> elasticsearch/.env
     # copy dotcms packages and SSL certs/key to elasticsearch image
-    sed -i'' "s/^ELASTIC_PASSWORD=.*/ELASTIC_PASSWORD=${elasticsearch_superuser_password}/" .env
     webinf=${app_dir}/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF
-    cp -R ${webinf}/elasticsearch/config .
-    cat <<- EODOCKER > Dockerfile
+    cp -R ${webinf}/elasticsearch/config elasticsearch/
+
+    cat <<- EODOCKER > elasticsearch/Dockerfile
 	FROM docker.elastic.co/elasticsearch/elasticsearch:${elasticsearch_version}
  	RUN mkdir -p  /usr/share/elasticsearch/config/certificates/ca
 	COPY config/root-ca.pem       /usr/share/elasticsearch/config/certificates/ca/root-ca.pem
 	COPY config/elasticsearch.pem /usr/share/elasticsearch/config/certificates/elasticsearch.pem
 	COPY config/elasticsearch.key /usr/share/elasticsearch/config/certificates/elasticsearch.key
 EODOCKER
-    for jar in $( find ${webinf}/lib -type f -name "dotcms*.jar" -exec basename {} \; )
+
+    # copy dotcms elasticsearch plugin files(s) to elasticsearch image
+    mkdir -p elasticsearch/jarfiles
+    for jar in $( find ${webinf}/lib -type f -name "dotcms_${dotcms_version}_*.jar" -exec basename {} \; )
     do
-        mkdir -p jarfiles
-	cp ${webinf}/lib/$jar jarfiles/
+	cp ${webinf}/lib/$jar elasticsearch/jarfiles/
 	echo "COPY jarfiles/$jar  /usr/share/elasticsearch/lib/$jar" >> Dockerfile
     done
-    # docker build -t elasticsearch-dotcms .
+    ( cd elasticsearch && docker build -t elasticsearch-dotcms . )
 }
 
-install_elasticsearch () {
+connect_elasticsearch () {
     print_funcname
     sysctl -w $( echo "vm.max_map_count=262144" | tee /etc/sysctl.d/dotcms-es-vm.max_map_count ) 
+    ( cd elasticsearch && docker-compose up -d )
+    # set elasticsearch credentials in ROOT plugin
+    sed "s/^ES_AUTH_BASIC_USER=.*/ES_AUTH_BASIC_USER=${elasticsearch_user}/; \
+	 s/^ES_AUTH_BASIC_PASSWORD=.*/ES_AUTH_BASIC_PASSWORD=${elasticsearch_password}/" \
+         ${app_dir}/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties > \ 
+         ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/
+
+}
+
+start_dotcms () {
+    su -c "${app_dir}/bin/deploy-plugins.sh" $app_user
+    su -c "${app_dir}/bin/startup.sh" $app_user
 }
 
 
@@ -107,9 +122,9 @@ selinux_permissive
 create_app_user
 docker_install
 dotcms_install_packages
-dotcms_mount_nfs
+# dotcms_mount_nfs
 dotcms_install_nginx_certbot
 dotcms_download
 build_elasticsearch_image
-install_elasticsearch
+run_elasticsearch
 

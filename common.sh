@@ -6,6 +6,7 @@
 dotcms_version=5.3.3
 tomcat_version=8.5.32
 elasticsearch_version=7.3.2
+docker_compose_version=1.26.2
 
 app_user=dotcms
 app_user_uid=10000
@@ -21,18 +22,20 @@ postgres_ip=127.0.0.1
 
 app_servername=dotcms.scheduleomatic.com
 
-# writing custom posgres DB creds via ROOT plugin not working so far :-/
 postgres_db=dotcms
 postgres_username=dotcms
-postgres_password=dotcms
+postgres_password=ADqtarsalgiaMtumplineTamf3TntNF8
 postgres_superuser_password=tMegallinazoacedreE4RHMF6RMqJgd4
 
 elasticsearch_superuser_password=mR6antifoamingMJaquesianJhFmTJJ2
-# add user for dotcms
+
+# create us user for dotcms
 elasticsearch_user=admin
 elasticsearch_password=admin
 
 nginx_root=/usr/share/nginx
+
+dotcms_download_url=http://static.dotcms.com/versions/dotcms_${dotcms_version}.tar.gz
 
 #### common functions ####
 
@@ -70,7 +73,7 @@ docker_install () {
     if [ ! -x /usr/local/bin/docker-compose ]
     then
         sudo curl -L \
-            https://github.com/docker/compose/releases/download/1.26.2/docker-compose-`uname -s`-`uname -m` \
+            https://github.com/docker/compose/releases/download/${docker_compose_version}/docker-compose-`uname -s`-`uname -m` \
             -o /usr/local/bin/docker-compose
         chmod 755 /usr/local/bin/docker-compose
     fi
