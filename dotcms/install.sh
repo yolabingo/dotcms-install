@@ -105,9 +105,9 @@ connect_elasticsearch () {
     sysctl -w $( echo "vm.max_map_count=262144" | tee /etc/sysctl.d/dotcms-es-vm.max_map_count ) 
     ( cd elasticsearch && docker-compose up -d )
     # set elasticsearch credentials in ROOT plugin
-    sed "s/^ES_AUTH_BASIC_USER=.*/ES_AUTH_BASIC_USER=${elasticsearch_user}/; \
-	 s/^ES_AUTH_BASIC_PASSWORD=.*/ES_AUTH_BASIC_PASSWORD=${elasticsearch_password}/" \
-         ${app_dir}/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties > \ 
+    sed "s/.*ES_AUTH_BASIC_USER=.*/ES_AUTH_BASIC_USER=${elasticsearch_user}/; \
+	 s/.*ES_AUTH_BASIC_PASSWORD=.*/ES_AUTH_BASIC_PASSWORD=${elasticsearch_password}/" \
+         ${app_dir}/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties > \
          ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/
 
 }
@@ -126,5 +126,5 @@ dotcms_install_packages
 dotcms_install_nginx_certbot
 dotcms_download
 build_elasticsearch_image
-run_elasticsearch
-
+connect_elasticsearch
+start_dotcms
