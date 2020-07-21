@@ -108,7 +108,7 @@ connect_elasticsearch () {
     sed "s/.*ES_AUTH_BASIC_USER=.*/ES_AUTH_BASIC_USER=${elasticsearch_user}/; \
 	 s/.*ES_AUTH_BASIC_PASSWORD=.*/ES_AUTH_BASIC_PASSWORD=${elasticsearch_password}/" \
          ${app_dir}/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties > \
-         ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/
+         ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/tomcat-${tomcat_version}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties
 
 }
 

@@ -27,11 +27,9 @@ postgres_username=dotcms
 postgres_password=ADqtarsalgiaMtumplineTamf3TntNF8
 postgres_superuser_password=tMegallinazoacedreE4RHMF6RMqJgd4
 
+# default es user...
+elasticsearch_user=elasticsearch
 elasticsearch_superuser_password=mR6antifoamingMJaquesianJhFmTJJ2
-
-# create us user for dotcms
-elasticsearch_user=admin
-elasticsearch_password=admin
 
 nginx_root=/usr/share/nginx
 
