@@ -76,7 +76,7 @@ EOCONF
     echo "DB config written to $db_config"
 }
 
-build_elasticsearch_image () {
+build_and_start_elasticsearch () {
     print_funcname
     sysctl -w $( echo "vm.max_map_count=262144" | tee /etc/sysctl.d/dotcms-es-vm.max_map_count ) 
     cat elasticsearch/docker-dot-env > elasticsearch/.env
@@ -137,6 +137,6 @@ dotcms_install_packages
 dotcms_mount_nfs
 dotcms_install_nginx_certbot
 dotcms_download
-build_elasticsearch_image
+build_and_start_elasticsearch
 connect_elasticsearch
 start_dotcms
