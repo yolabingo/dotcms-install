@@ -3,6 +3,20 @@
 
 # variables and functions used by the other setup scripts
 
+app_servername=dotcms.scheduleomatic.com
+
+dotcms_ip=10.0.1.145
+nfs_ip=10.0.1.19
+postgres_ip=10.0.1.134
+
+postgres_db=dotcms
+postgres_username=dotcms
+postgres_password=ADqtarsalgiaMtumplineTamf3TntNF8
+postgres_superuser_password=tMegallinazoacedreE4RHMF6RMqJgd4
+
+elasticsearch_user=elastic
+elasticsearch_password=mR6antifoamingMJaquesianJhFmTJJ2
+
 dotcms_version=5.3.3
 elasticsearch_version=7.3.2
 docker_compose_version=1.26.2
@@ -13,21 +27,6 @@ app_user=dotcms
 app_user_uid=10000
 app_dir=/home/${app_user}/app
 nfs_dir=/opt/dotcms/data/assets
-
-dotcms_ip=10.0.1.145
-nfs_ip=10.0.1.19
-postgres_ip=10.0.1.134
-
-app_servername=dotcms.scheduleomatic.com
-
-postgres_db=dotcms
-postgres_username=dotcms
-postgres_password=ADqtarsalgiaMtumplineTamf3TntNF8
-postgres_superuser_password=tMegallinazoacedreE4RHMF6RMqJgd4
-
-# default es user...
-elasticsearch_user=elastic
-elasticsearch_password=mR6antifoamingMJaquesianJhFmTJJ2
 
 nginx_root=/usr/share/nginx
 
