@@ -26,9 +26,6 @@ run_postgres () {
     docker ps
 }
 
-echo foo
-echo "$postgres_db"
-
 selinux_permissive
 create_app_user
 docker_install
