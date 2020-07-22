@@ -108,7 +108,7 @@ connect_elasticsearch () {
     sed "s,.*ES_AUTH_BASIC_USER=.*,ES_AUTH_BASIC_USER=${elasticsearch_user},; \
     	 s,.*ES_AUTH_BASIC_PASSWORD=.*,ES_AUTH_BASIC_PASSWORD=${elasticsearch_password},; \
     	 s,.*ES_TLS_ENABLED=.*,ES_TLS_ENABLED=true,; \ 
-    	 s,.*ES_AUTH_TLS_CLIENT_CERT.*,ES_AUTH_TLS_CLIENT_CERT=certs,elasticsearch.pem,; \
+    	 s,.*ES_AUTH_TLS_CLIENT_CERT.*,ES_AUTH_TLS_CLIENT_CERT=certs/elasticsearch.pem,; \
          s,.*ES_AUTH_TLS_CLIENT_KEY.*,ES_AUTH_TLS_CLIENT_KEY=certs/elasticsearch.key,; \
          s,.*ES_AUTH_TLS_CA_CERT.*,ES_AUTH_TLS_CA_CERT=certs/root-ca.pem," \
          ${app_dir}/dotserver/${tomcat}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties > \
