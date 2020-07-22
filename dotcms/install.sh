@@ -51,6 +51,7 @@ dotcms_install_nginx_certbot () {
 
 # fetch dotcms
 dotcms_download () {
+    print_funcname
     if [ -d $app_dir/dotserver ]
     then
         return 0
@@ -81,6 +82,7 @@ EOCONF
 }
 
 build_elasticsearch_image () {
+    print_funcname
     cat elasticsearch/docker-dot-env > elasticsearch/.env
     echo "ELASTIC_PASSWORD=${elasticsearch_password}" >> elasticsearch/.env
     # copy dotcms packages and SSL certs/key to elasticsearch image
@@ -125,6 +127,7 @@ connect_elasticsearch () {
 }
 
 start_dotcms () {
+    print_funcname
     su -c "${app_dir}/bin/deploy-plugins.sh" $app_user
     su -c "${app_dir}/bin/startup.sh" $app_user
     echo
