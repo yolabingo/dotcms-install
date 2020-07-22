@@ -14,12 +14,9 @@ app_user_uid=10000
 app_dir=/home/${app_user}/app
 nfs_dir=/opt/dotcms/data/assets
 
-dotcms_ip=172.31.37.72
-dotcms_ip=127.0.0.1
-nfs_ip=172.31.60.88
-nfs_ip=127.0.0.1
-postgres_ip=172.31.53.58
-postgres_ip=127.0.0.1
+dotcms_ip=10.0.1.145
+nfs_ip=10.0.1.19
+postgres_ip=10.0.1.134
 
 app_servername=dotcms.scheduleomatic.com
 
