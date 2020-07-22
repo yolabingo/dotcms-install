@@ -3,7 +3,7 @@
 
 # variables and functions used by the other setup scripts
 
-app_servername=dotcms.scheduleomatic.com
+app_servername=dotcms.discodecline.com
 
 dotcms_ip=10.0.1.145
 nfs_ip=10.0.1.19
