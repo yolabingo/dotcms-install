@@ -4,9 +4,10 @@
 # variables and functions used by the other setup scripts
 
 dotcms_version=5.3.3
-tomcat_version=8.5.32
 elasticsearch_version=7.3.2
 docker_compose_version=1.26.2
+tomcat_version=8.5.32
+tomcat="tomcat-${tomcat_version}"
 
 app_user=dotcms
 app_user_uid=10000
@@ -28,8 +29,8 @@ postgres_password=ADqtarsalgiaMtumplineTamf3TntNF8
 postgres_superuser_password=tMegallinazoacedreE4RHMF6RMqJgd4
 
 # default es user...
-elasticsearch_user=elasticsearch
-elasticsearch_superuser_password=mR6antifoamingMJaquesianJhFmTJJ2
+elasticsearch_user=elastic
+elasticsearch_password=mR6antifoamingMJaquesianJhFmTJJ2
 
 nginx_root=/usr/share/nginx
 
