@@ -78,6 +78,7 @@ EOCONF
 
 build_elasticsearch_image () {
     print_funcname
+    sysctl -w $( echo "vm.max_map_count=262144" | tee /etc/sysctl.d/dotcms-es-vm.max_map_count ) 
     cat elasticsearch/docker-dot-env > elasticsearch/.env
     echo "ELASTIC_PASSWORD=${elasticsearch_password}" >> elasticsearch/.env
     # copy dotcms packages and SSL certs/key to elasticsearch image
@@ -99,13 +100,11 @@ EODOCKER
 	cp ${webinf}/lib/$jar elasticsearch/jarfiles/
 	echo "COPY jarfiles/$jar  /usr/share/elasticsearch/lib/$jar" >> Dockerfile
     done
-    ( cd elasticsearch && docker build -t elasticsearch-dotcms . )
+    ( cd elasticsearch && docker build -t elasticsearch-dotcms . && docker-compose up -d )
 }
 
 connect_elasticsearch () {
     print_funcname
-    sysctl -w $( echo "vm.max_map_count=262144" | tee /etc/sysctl.d/dotcms-es-vm.max_map_count ) 
-    ( cd elasticsearch && docker-compose up -d )
     # set elasticsearch credentials in ROOT plugin
     sed "s,.*ES_AUTH_BASIC_USER=.*,ES_AUTH_BASIC_USER=${elasticsearch_user},; \
     	 s,.*ES_AUTH_BASIC_PASSWORD=.*,ES_AUTH_BASIC_PASSWORD=${elasticsearch_password},; \
