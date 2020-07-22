@@ -77,7 +77,7 @@ EOCONF
 
 build_elasticsearch_image () {
     cat elasticsearch/docker-dot-env > elasticsearch/.env
-    echo "ELASTIC_PASSWORD=${elasticsearch_superuser_password}" >> elasticsearch/.env
+    echo "ELASTIC_PASSWORD=${elasticsearch_password}" >> elasticsearch/.env
     # copy dotcms packages and SSL certs/key to elasticsearch image
     webinf=${app_dir}/dotserver/${tomcat}/webapps/ROOT/WEB-INF
     cp -R ${webinf}/elasticsearch/config elasticsearch/
@@ -107,6 +107,7 @@ connect_elasticsearch () {
     # set elasticsearch credentials in ROOT plugin
     sed "s/.*ES_AUTH_BASIC_USER=.*/ES_AUTH_BASIC_USER=${elasticsearch_user}/; \
 	 s/.*ES_AUTH_BASIC_PASSWORD=.*/ES_AUTH_BASIC_PASSWORD=${elasticsearch_password}/; \
+	 s/.*ES_TLS_ENABLED=.*/ES_TLS_ENABLED=true/; \ 
 	 s,.*ES_AUTH_TLS_CLIENT_CERT.*,ES_AUTH_TLS_CLIENT_CERT=certs/elasticsearch.pem,; \
      s,.*ES_AUTH_TLS_CLIENT_KEY.*,ES_AUTH_TLS_CLIENT_KEY=certs/elasticsearch.key,; \
      s,.*ES_AUTH_TLS_CA_CERT.*,ES_AUTH_TLS_CA_CERT=certs/root-ca.pem," \
@@ -115,7 +116,7 @@ connect_elasticsearch () {
     # copy certs/key to dotcms assets dir
     mkdir -p ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets/certs
     cp  elasticsearch/config/*key elasticsearch/config/*pem ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets/certs/
-    chown -R dotserver ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets
+    chown -R ${app_user}:${app_user} ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets
 }
 
 start_dotcms () {
