@@ -74,11 +74,6 @@ dotcms_download () {
 	leakDetectionThreshold=60000
 EOCONF
     echo "DB config written to $db_config"
-    # copy server.xml to ROOT folder plugin
-    server_xml="${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/${tomcat}/conf/server.xml"
-    su -c "mkdir -p  $( dirname ${server_xml} )" $app_user
-    su -c "touch  ${server_xml}" $app_user
-    cat server.xml > ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/${tomcat}/conf/server.xml
 }
 
 build_elasticsearch_image () {
