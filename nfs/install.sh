@@ -5,7 +5,7 @@
 #### NFS server setup ####
 ##########################
 
-source ./common.sh
+. ../common.sh
 
 nfs_install_packages () {
     print_funcname
