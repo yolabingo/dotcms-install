@@ -114,7 +114,7 @@ connect_elasticsearch () {
          ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/${tomcat}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties
     # copy certs/key to dotcms assets dir
     mkdir -p ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets/certs
-    cp elasticsearch/config/*.*(pem|key) ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets/certs/
+    cp  elasticsearch/config/*key elasticsearch/config/*pem ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets/certs/
     chown -R dotserver ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets
 }
 
