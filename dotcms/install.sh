@@ -14,7 +14,7 @@ dotcms_install_packages () {
     print_funcname
     yum update -y
     amazon-linux-extras install -y  epel
-    yum install -y rpcbind nfs-utils nfs4-acl-tools nginx certbot tar java-1.8.0-openjdk-headless
+    yum install -y rpcbind nfs-utils nfs4-acl-tools nginx certbot tar java-1.8.0-openjdk-headless java-1.8.0-openjdk-devel
     systemctl enable --now rpcbind nfs-idmapd nginx
 }
 
@@ -106,11 +106,11 @@ connect_elasticsearch () {
     ( cd elasticsearch && docker-compose up -d )
     # set elasticsearch credentials in ROOT plugin
     sed "s,.*ES_AUTH_BASIC_USER=.*,ES_AUTH_BASIC_USER=${elasticsearch_user},; \
-	 s,.*ES_AUTH_BASIC_PASSWORD=.*,ES_AUTH_BASIC_PASSWORD=${elasticsearch_password},; \
-	 s,.*ES_TLS_ENABLED=.*,ES_TLS_ENABLED=true,; \ 
-	 s,.*ES_AUTH_TLS_CLIENT_CERT.*,ES_AUTH_TLS_CLIENT_CERT=certs,elasticsearch.pem,; \
-     s,.*ES_AUTH_TLS_CLIENT_KEY.*,ES_AUTH_TLS_CLIENT_KEY=certs/elasticsearch.key,; \
-     s,.*ES_AUTH_TLS_CA_CERT.*,ES_AUTH_TLS_CA_CERT=certs/root-ca.pem," \
+    	 s,.*ES_AUTH_BASIC_PASSWORD=.*,ES_AUTH_BASIC_PASSWORD=${elasticsearch_password},; \
+    	 s,.*ES_TLS_ENABLED=.*,ES_TLS_ENABLED=true,; \ 
+    	 s,.*ES_AUTH_TLS_CLIENT_CERT.*,ES_AUTH_TLS_CLIENT_CERT=certs,elasticsearch.pem,; \
+         s,.*ES_AUTH_TLS_CLIENT_KEY.*,ES_AUTH_TLS_CLIENT_KEY=certs/elasticsearch.key,; \
+         s,.*ES_AUTH_TLS_CA_CERT.*,ES_AUTH_TLS_CA_CERT=certs/root-ca.pem," \
          ${app_dir}/dotserver/${tomcat}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties > \
          ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/${tomcat}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties
     # copy certs/key to dotcms assets dir
