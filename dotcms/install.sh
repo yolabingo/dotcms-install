@@ -73,6 +73,11 @@ dotcms_download () {
 	leakDetectionThreshold=60000
 EOCONF
     echo "DB config written to $db_config"
+    # copy server.xml to ROOT folder plugin
+    server_xml="${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/${tomcat}/conf/server.xml"
+    su -c "mkdir -p  $( dirname ${server_xml} )" $app_user
+    su -c "touch  ${server_xml}" $app_user
+    cat server.xml > ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/${tomcat}/conf/server.xml
 }
 
 build_elasticsearch_image () {
@@ -111,7 +116,7 @@ connect_elasticsearch () {
     	 s,.*ES_AUTH_TLS_CLIENT_CERT.*,ES_AUTH_TLS_CLIENT_CERT=certs/elasticsearch.pem,; \
          s,.*ES_AUTH_TLS_CLIENT_KEY.*,ES_AUTH_TLS_CLIENT_KEY=certs/elasticsearch.key,; \
          s,.*ES_AUTH_TLS_CA_CERT.*,ES_AUTH_TLS_CA_CERT=certs/root-ca.pem," \
-         ${app_dir}/dotserver/${tomcat}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties > \
+         ${app_dir}/dotserver/${tomcat}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties | uniq > \
          ${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/${tomcat}/webapps/ROOT/WEB-INF/classes/dotcms-config-cluster.properties
     # copy certs/key to dotcms assets dir
     mkdir -p ${app_dir}/dotserver/${tomcat}/webapps/ROOT/assets/certs
