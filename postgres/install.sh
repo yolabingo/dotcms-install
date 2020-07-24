@@ -14,7 +14,7 @@ set_db_creds () {
          s/POSTGRES_PASSWORD/${postgres_password}/" init.sql-template > init.sql 
 }
 
-# runs postgres and elasticsearch via docker, as $app_user
+# runs postgres via docker, as $app_user
 run_postgres () {
     print_funcname
     docker image build -t postgres12 .
