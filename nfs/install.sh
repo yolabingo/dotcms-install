@@ -25,7 +25,7 @@ nfs_exports () {
     then
         echo "${nfs_dir}   ${dotcms_ip}(rw,sync,no_root_squash,no_subtree_check,insecure)" >> /etc/exports
     fi
-    systemctl start --now rpcbind nfs-idmapd nfs-server
+    systemctl enable --now rpcbind nfs-idmapd nfs-server
     exportfs -rav
 }
 
