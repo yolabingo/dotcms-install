@@ -8,8 +8,7 @@
 . ../common.sh
 
 set_db_creds () {
-	echo foo
-	echo "$postgres_db"
+    print_funcname
     sed "s/POSTGRES_DB/${postgres_db}/; \
          s/POSTGRES_USERNAME/${postgres_username}/; \
          s/POSTGRES_PASSWORD/${postgres_password}/" init.sql-template > init.sql 
@@ -17,6 +16,7 @@ set_db_creds () {
 
 # runs postgres and elasticsearch via docker, as $app_user
 run_postgres () {
+    print_funcname
     docker image build -t postgres12 .
     docker container run \
 	    -e POSTGRES_PASSWORD=${postgres_superuser_password} \
