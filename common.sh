@@ -30,7 +30,7 @@ nfs_dir=/opt/dotcms/data/assets
 
 nginx_root=/usr/share/nginx
 
-dotcms_download_url=http://static.dotcms.com/versions/dotcms_${dotcms_version}.tar.gz
+dotcms_download_url=https://static.dotcms.com/versions/dotcms_${dotcms_version}.tar.gz
 
 #### common functions ####
 
