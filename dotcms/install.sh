@@ -57,6 +57,12 @@ dotcms_download () {
         return 0
     fi
     su -c "cd && mkdir -p $app_dir && curl $dotcms_download_url | tar -C $app_dir -xzf -" $app_user
+    if [ -f starter.zip ]
+    then
+        echo "replacing starter.zip"
+        cp -f starter.zip ${app_dir}/dotserver/${tomcat}/webapps/ROOT/starter.zip
+    fi
+
     su -c 'echo "JAVA_HOME=$(dirname $(dirname $(dirname $(readlink -f $(which java)))))" >> ~/.bashrc' $app_user
     # ROOT folder config override
     db_config="${app_dir}/plugins/com.dotcms.config/ROOT/dotserver/${tomcat}/webapps/ROOT/WEB-INF/classes/db.properties"
@@ -134,7 +140,10 @@ selinux_permissive
 create_app_user
 docker_install
 dotcms_install_packages
-dotcms_mount_nfs
+if [ ! -z "${nfs_ip}" ]
+then
+    dotcms_mount_nfs
+fi
 dotcms_install_nginx_certbot
 dotcms_download
 build_and_start_elasticsearch
